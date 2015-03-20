@@ -22,11 +22,11 @@ The typical interactions are:
 
 * Web APIs communicate with web APIs (sometimes on their own, sometimes on behalf of a user)
 
-Typically each and every layer (front-end, middle-tier and back-end) has to protect resources and
+Typically each and every layer (front-end, middle-tier, and back-end) has to protect resources and
 implement authentication and/or authorization – and quite typically against the same user store.
 
 This is why we don’t implement these fundamental security functions in the business applications/endpoints itself,
-but rather outsource that critical functionality to a service - the security token service.
+but rather outsource that critical functionality to a service - the security token service (STS).
 
 This leads to the following security architecture and usage of protocols:
 
@@ -37,11 +37,11 @@ This divides the security concerns into two parts.
 **Authentication**
 
 Authentication is needed when an application needs to know about the identity of the current user.
-Typically these applications manages data on behalf of that user and needs to make sure that this user can only
+Typically this application manages data on behalf of that user and needs to make sure that this user can only
 access the data he is allowed to. The most common example for that are (classic) web applications –
 but also native and JS-based applications have need for authentication.
 
-The most common authentication protocols are SAML2p, WS-Federation and OpenID Connect – SAML2p being the
+The most common authentication protocols are SAML2p, WS-Federation, and OpenID Connect – SAML2p being the
 most popular and widely deployed one.
 
 OpenID Connect is the newest of the three, but is generally considered being the future because it has the
@@ -60,8 +60,7 @@ authentication and authorization can be centralized.
 **OpenID Connect and OAuth2 – better together**
 
 OpenID Connect and OAuth2 are very similar – in fact OpenID Connect is an extension on top of OAuth2.
-This means that you can combine the two fundamental security concerns – authentication and API access into a single protocol –
-and often a single round trip to the security token service.
+This means that you can combine the two fundamental security concerns – authentication and API access into a single protocol – and often a single round trip to the security token service.
 
 This is why we believe that the combination of OpenID Connect and OAuth2 is the best approach to secure modern
 applications for the foreseeable future. IdentityServer3 is an implementation of these two protocols and is
