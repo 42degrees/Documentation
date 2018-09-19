@@ -1,0 +1,48 @@
+---
+layout: docs-default
+---
+
+# Deployment
+
+## Data Protection
+
+If you are running in IIS, you need to synchronize machine keys. If you are running outside of IIS,
+you need to use a web farm compatible data protector for Katana.
+
+Unfortunately, Katana does not ship with one out of the box. IdentityServer includes a data protector based on
+X.509 certificates (`X509CertificateDataProtector`) that you can set on the options class.
+
+## Terminating SSL
+
+If you want to terminate SSL on the load balancer, there are two relevant settings on the options:
+
+ * `RequireSsl`
+     * Set this to false to allow non-SSL connections between the load balancer and IdentityServer.
+ * `PublicOrigin`
+    * Since your internal farm nodes have different names than the public reachable address, IdentityServer can't use it
+      for link generation. Set this property to the public name.
+
+## Signing Keys
+
+Depending on your security requirements you have a couple of choices here
+
+* Deploy the signing certificates to all nodes. Preferably into the Windows certificate store
+* Use a separate machine or a commercial service (like Azure KeyVault) for signing and/or key storage (by implementing the `ITokenSigningService` interface)
+
+## Configuration data
+
+The configuration data for scopes, clients and users must be in-sync.
+
+Either they are static and you change configuration data via continuous deployment, or you use a persistence layer like
+the Entity Framework repo (or community contributions like the one for MongoDB).
+
+## Operational data
+
+Some features require a shared database for operational data - namely authorization codes, reference tokens and refresh token.
+If you use any of those features you need a persistence layer for them. Again you could use our Entity Framework implementation.
+
+## Caching
+
+IdentityServer has a simple built-in in-memory cache. This is useful on its own but not as optimized as it could be for web farms.
+You can plug in your own cache by implementing the `ICache` interface. Check the community contributions (e.g. for a Redis implementation).
+
